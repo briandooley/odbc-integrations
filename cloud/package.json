@@ -1,0 +1,24 @@
+{
+  "name": "integration_test_01",
+  "version": "0.0.1",
+  "description": "Oracle and MongoDB Integration Test",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@bitbucket.org/david_martin_fh/integration_test_01.git"
+  },
+  "keywords": [
+    "oracle",
+    "mongodb",
+    "feedhenry"
+  ],
+  "author": "david.martin@feedhenry.com",
+  "license": "BSD",
+  "dependencies": {
+    "fh-nodeapp": "~0.58.0",
+    "node-oracle": "~0.3.1"
+  }
+}
