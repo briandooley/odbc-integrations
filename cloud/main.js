@@ -97,6 +97,62 @@ exports.importOracle = function (params, callback) {
   });
 };
 
+exports.copyOracleToMongoDB = function (params, callback) {
+  console.log('copyOracleToMongoDB');
+  // get all oracle db table rows
+  exports.selectOracle({}, function (err, results) {
+    handleError(err, callback, null);
+    if (results == null || results.length < 1) handleError('No rows found in Oracle DB Table', callback, null);
+    var mongoEntriesToAdd = [];
+    console.log('copyOracleToMongoDB mapping oracle rows to mongo docs');
+    async.map(results, function (row) {
+      mongoEntriesToAdd.push({
+        'Team': row['TEAM'],
+        'Stadium': row['STADIUM'],
+        'Web Site': row['WEB_SITE'],
+        'League': row['LEAGUE'],
+        'Last World Series Win': row['LAST_WORLD_SERIES_WIN']
+      });
+    }, function (err, res) {
+      handleError(err, callback, null);
+      importMongoDB({
+        list: mongoEntriesToAdd
+      }, function (err, res2) {
+        handleError(err, callback, null);
+        console.log('copyOracleToMongoDB success res2:', res2);
+      });
+    });
+  });
+};
+
+exports.copyMongoDBToOracle = function (params, callback) {
+  console.log('copyMongoDBToOracle');
+  // get all mongo db table rows
+  exports.selectMongoDB({}, function (err, results) {
+    handleError(err, callback, null);
+    if (results == null || results.length < 1) handleError('No documents found in Mongo DB collection', callback, null);
+    var oracleEntriesToAdd = [];
+    console.log('copyMongoDBToOracle mapping mongo docs to oracle rows');
+    async.map(results, function (row) {
+      oracleEntriesToAdd.push({
+        'Team': row['Team'],
+        'Stadium': row['Stadium'],
+        'Web Site': row['Web Site'],
+        'League': row['League'],
+        'Last World Series Win': row['Last World Series Win']
+      });
+    }, function (err, res) {
+      handleError(err, callback, null);
+      importOracle({
+        list: oracleEntriesToAdd
+      }, function (err, res2) {
+        handleError(err, callback, null);
+        console.log('copyMongoDBToOracle success res2:', res2);
+      });
+    });
+  });
+};
+
 /*
  * Get all entries/documents in the configured mongo database collection
  */
