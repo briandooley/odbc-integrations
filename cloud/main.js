@@ -117,7 +117,7 @@ exports.copyOracleToMongoDB = function (params, callback) {
     }, function (err, res) {
       handleError(err, callback, null);
       console.log('copyOracleToMongoDB copying oracle rows mongoEntriesToAdd.length:', mongoEntriesToAdd.length);
-      importMongoDB({
+      exports.importMongoDB({
         list: mongoEntriesToAdd
       }, function (err, res2) {
         handleError(err, callback, null);
@@ -148,7 +148,7 @@ exports.copyMongoDBToOracle = function (params, callback) {
     }, function (err, res) {
       handleError(err, callback, null);
       console.log('copyMongoDBToOracle copying mongo documents oracleEntriesToAdd.length:', oracleEntriesToAdd.length);
-      importOracle({
+      exports.importOracle({
         list: oracleEntriesToAdd
       }, function (err, res2) {
         handleError(err, callback, null);
