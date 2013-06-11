@@ -1,0 +1,100 @@
+[
+  {
+    "Team": "Baltimore Orioles",
+    "Stadium": "Oriole Park",
+    "Web Site": "orioles.com",
+    "League": "AL",
+    "Last World Series Win": "1983"
+  },
+  {
+    "Team": "Boston Red Sox",
+    "Stadium": "Fenway Park",
+    "Web Site": "redsox.com",
+    "League": "AL",
+    "Last World Series Win": "2007"
+  },
+  {
+    "Team": "Chicago White Sox",
+    "Stadium": "U.S. Cellular Field",
+    "Web Site": "whitesox.com",
+    "League": "AL",
+    "Last World Series Win": "2005"
+  },
+  {
+    "Team": "Cleveland Indians",
+    "Stadium": "Progressive Field",
+    "Web Site": "indians.com",
+    "League": "AL",
+    "Last World Series Win": "1948"
+  },
+  {
+    "Team": "Detroit Tigers",
+    "Stadium": "Comerica Park",
+    "Web Site": "tigers.com",
+    "League": "AL",
+    "Last World Series Win": "1984"
+  },
+  {
+    "Team": "Houston Astros",
+    "Stadium": "Minute Maid Park",
+    "Web Site": "astros.com",
+    "League": "AL",
+    "Last World Series Win": "-"
+  },
+  {
+    "Team": "Kansas City Royals",
+    "Stadium": "Kauffman Stadium",
+    "Web Site": "royals.com",
+    "League": "AL",
+    "Last World Series Win": "1985"
+  },
+  {
+    "Team": "Los Angeles Angels",
+    "Stadium": "Angel Stadium",
+    "Web Site": "angels.com",
+    "League": "AL",
+    "Last World Series Win": "2002"
+  },
+  {
+    "Team": "Minnesota Twins",
+    "Stadium": "Target Field",
+    "Web Site": "twinsbaseball.com",
+    "League": "AL",
+    "Last World Series Win": "1991"
+  },
+  {
+    "Team": "New York Yankees",
+    "Stadium": "Yankee Stadium",
+    "Web Site": "yankees.com",
+    "League": "AL",
+    "Last World Series Win": "2009"
+  },
+  {
+    "Team": "Oakland Athletics",
+    "Stadium": "O.co Coliseum",
+    "Web Site": "oaklandathletics.com",
+    "League": "AL",
+    "Last World Series Win": "1989"
+  },
+  {
+    "Team": "Seattle Mariners",
+    "Stadium": "Safeco Field",
+    "Web Site": "Mariners.com",
+    "League": "AL",
+    "Last World Series Win": "-"
+  },
+  {
+    "Team": "Tampa Bay Rays",
+    "Stadium": "Tropicana Field",
+    "Web Site": "raysbaseball.com",
+    "League": "AL",
+    "Last World Series Win": "-"
+  },
+  {
+    "Team": "Texas Rangers",
+    "Stadium": "Rangers Ballpark in Arlington",
+    "Web Site": "texasrangers.com",
+    "League": "AL",
+    "Last World Series Win": "-"
+  }
+]

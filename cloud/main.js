@@ -41,17 +41,21 @@ exports.selectOracle = function(params, callback) {
 exports.importOracle = function (params, callback) {
   var list = params.list;
   if (list == null || list.length < 1) return callback('missing "list" entries');
+  console.log('importOracle list:', list);
   oracle.connect(settings, function(err, connection) {
     if(err) return callback(err);
     async.mapSeries(list, function (item, cb) {
-      connection.execute("INSERT INTO " + process.env.ORACLE_TABLE + " VALUES (:1, :2, :3, :4, :5)",
-      [
+      console.log('mapSeries item:', item);
+      var stmt = 'INSERT INTO ' + process.env.ORACLE_TABLE + ' VALUES (:1, :2, :3, :4, :5)';
+      var itemVals = [
         item['Team'],
         item['Stadium'],
         item['Web Site'],
         item['League'],
-        item['Last Word Series Win']
-      ], function(err, results) {
+        item['Last World Series Win']
+      ];
+      console.log('connection.execute stmt:', stmt, 'itemVals:', itemVals);
+      connection.execute(stmt, itemVals, function(err, results) {
         cb(err, results);
       });
     }, function (err, results) {
