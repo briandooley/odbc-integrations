@@ -1,5 +1,8 @@
 var util = require('util');
 var oracle = require('oracle');
+var mongodb = require('mongodb');
+        
+
 /* main.js
  * All calls here are publicly exposed as REST API endpoints.
  * - all parameters must be passed in a single JSON paramater.
@@ -24,12 +27,45 @@ var settings = {
 };
 
 // Simple oracle select statement
-exports.testSelectOracle = function(params, callback) {
+exports.selectOracle = function(params, callback) {
   oracle.connect(settings, function(err, connection) {
     if(err) return callback(err);
     connection.execute("SELECT * FROM INTEGRATION_TEST_ORACLE_01", [], function(err, results) {
       if(err) return callback(err);
       return callback (null, results);
+    });
+  });
+};
+
+exports.selectMongoDB = function (params, callback) {
+  var client = new mongodb.Db(process.env.MONGODB_DATABASE, new mongodb.Server(process.env.MONGODB_HOSTNAME, process.env.MONGODB_PORT, {}), {
+    w: 1
+  });
+
+  var handleErr = function (err) {
+    console.error(err);
+    try {
+      client.close();
+    } catch (e) {
+      // fail silently
+    }
+    return callback(err);
+  };
+
+  client.open(function (err) {
+    if (err) return handleErr(err);
+    client.authenticate(process.env.MONGODB_USER, process.env.MONGODB_PASSWORD, function (err, res) {
+      if (err) return handleErr(err);
+      client.collection('integration_test_mongodb_01', function (err, collection) {
+        if (err) return handleErr(err);
+        collection.find({}, function (err, cursor) {
+          if (err) return handleErr(err);
+          cursor.toArray(function (err, docs) {
+            if (err) return handleErr(err);
+            return callback(null, docs);
+          });
+        });
+      });
     });
   });
 };
