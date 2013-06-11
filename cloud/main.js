@@ -1,7 +1,7 @@
 var util = require('util');
 var oracle = require('oracle');
 var mongodb = require('mongodb');
-        
+var async = require('async');        
 
 /* main.js
  * All calls here are publicly exposed as REST API endpoints.
@@ -30,10 +30,34 @@ var settings = {
 exports.selectOracle = function(params, callback) {
   oracle.connect(settings, function(err, connection) {
     if(err) return callback(err);
-    connection.execute("SELECT * FROM INTEGRATION_TEST_ORACLE_01", [], function(err, results) {
+    connection.execute("SELECT * FROM " + process.env.ORACLE_TABLE, [], function(err, results) {
       connection.close();
       if(err) return callback(err);
       return callback (null, results);
+    });
+  });
+};
+
+exports.importOracle = function (params, callback) {
+  var list = params.list;
+  if (list == null || list.length < 1) return callback('missing "list" entries');
+  oracle.connect(settings, function(err, connection) {
+    if(err) return callback(err);
+    async.mapSeries(list, function (item, cb) {
+      connection.execute("INSERT INTO " + process.env.ORACLE_TABLE + " VALUES (:1, :2, :3, :4, :5)",
+      [
+        item['Team'],
+        item['Stadium'],
+        item['Web Site'],
+        item['League'],
+        item['Last Word Series Win']
+      ], function(err, results) {
+        cb(err, results);
+      });
+    }, function (err, results) {
+      connection.close();
+      if (err) return callback(err);
+      return callback(null, results);
     });
   });
 };
@@ -57,7 +81,7 @@ exports.selectMongoDB = function (params, callback) {
     if (err) return handleErr(err);
     client.authenticate(process.env.MONGODB_USER, process.env.MONGODB_PASSWORD, function (err, res) {
       if (err) return handleErr(err);
-      client.collection('integration_test_mongodb_01', function (err, collection) {
+      client.collection(process.env.MONGODB_COLLECTION, function (err, collection) {
         if (err) return handleErr(err);
         collection.find({}, function (err, cursor) {
           if (err) return handleErr(err);
@@ -66,6 +90,42 @@ exports.selectMongoDB = function (params, callback) {
             client.close();
             return callback(null, docs);
           });
+        });
+      });
+    });
+  });
+};
+
+exports.importMongoDB = function (params, callback) {
+  var list = params.list;
+  if (list == null || list.length < 1) return callback('missing "list" entries');
+
+  var client = new mongodb.Db(process.env.MONGODB_DATABASE, new mongodb.Server(process.env.MONGODB_HOSTNAME, process.env.MONGODB_PORT, {}), {
+    w: 1
+  });
+
+  var handleErr = function (err) {
+    console.error(err);
+    try {
+      client.close();
+    } catch (e) {
+      // fail silently
+    }
+    return callback(err);
+  };
+
+  client.open(function (err) {
+    if (err) return handleErr(err);
+    client.authenticate(process.env.MONGODB_USER, process.env.MONGODB_PASSWORD, function (err, res) {
+      if (err) return handleErr(err);
+      client.collection(process.env.MONGODB_COLLECTION, function (err, collection) {
+        if (err) return handleErr(err);
+        collection.insert(list, {
+          keepGoing:true
+        }, function (err, result) {
+          if (err) return handleErr(err);
+          client.close();
+          return callback(null, result);
         });
       });
     });
