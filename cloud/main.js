@@ -31,6 +31,7 @@ exports.selectOracle = function(params, callback) {
   oracle.connect(settings, function(err, connection) {
     if(err) return callback(err);
     connection.execute("SELECT * FROM INTEGRATION_TEST_ORACLE_01", [], function(err, results) {
+      connection.close();
       if(err) return callback(err);
       return callback (null, results);
     });
@@ -62,6 +63,7 @@ exports.selectMongoDB = function (params, callback) {
           if (err) return handleErr(err);
           cursor.toArray(function (err, docs) {
             if (err) return handleErr(err);
+            client.close();
             return callback(null, docs);
           });
         });
