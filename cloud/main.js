@@ -121,12 +121,12 @@ exports.selectMongoDB = function (params, callback) {
       // get collection we're interested in
       client.collection(process.env.MONGODB_COLLECTION, function (err, collection) {
         handleError(err, callback, client);
-        console.log('selectMongoDB collection:', collection);
+        console.log('selectMongoDB got collection');
         // find all entries in this collection
         var findStartTime = new Date();
         collection.find({}, function (err, cursor) {
           handleError(err, callback, client);
-          console.log('selectMongoDB cursor:', cursor);
+          console.log('selectMongoDB got cursor');
           var queryTime = Date.now() - findStartTime;
           $fh.stats.timing('mongo_find_time', queryTime);
           $fh.stats.timing('mongo_query_time', queryTime);
@@ -172,7 +172,7 @@ exports.importMongoDB = function (params, callback) {
       // get collection we're interested in
       client.collection(process.env.MONGODB_COLLECTION, function (err, collection) {
         handleError(err, callback, client);
-        console.log('importMongoDB collection:', collection);
+        console.log('importMongoDB got collection');
         // insert entries into the collection
         var insertStartTime = new Date();
         collection.insert(list, {
