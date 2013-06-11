@@ -105,7 +105,7 @@ exports.copyOracleToMongoDB = function (params, callback) {
     if (results == null || results.length < 1) handleError('No rows found in Oracle DB Table', callback, null);
     var mongoEntriesToAdd = [];
     console.log('copyOracleToMongoDB mapping oracle rows to mongo docs');
-    async.map(results, function (row) {
+    async.map(results, function (row, cb) {
       mongoEntriesToAdd.push({
         'Team': row['TEAM'],
         'Stadium': row['STADIUM'],
@@ -113,13 +113,16 @@ exports.copyOracleToMongoDB = function (params, callback) {
         'League': row['LEAGUE'],
         'Last World Series Win': row['LAST_WORLD_SERIES_WIN']
       });
+      cb();
     }, function (err, res) {
       handleError(err, callback, null);
+      console.log('copyOracleToMongoDB copying oracle rows mongoEntriesToAdd.length:', mongoEntriesToAdd.length);
       importMongoDB({
         list: mongoEntriesToAdd
       }, function (err, res2) {
         handleError(err, callback, null);
         console.log('copyOracleToMongoDB success res2:', res2);
+        callback(null, res2);
       });
     });
   });
@@ -133,7 +136,7 @@ exports.copyMongoDBToOracle = function (params, callback) {
     if (results == null || results.length < 1) handleError('No documents found in Mongo DB collection', callback, null);
     var oracleEntriesToAdd = [];
     console.log('copyMongoDBToOracle mapping mongo docs to oracle rows');
-    async.map(results, function (row) {
+    async.map(results, function (row, cb) {
       oracleEntriesToAdd.push({
         'Team': row['Team'],
         'Stadium': row['Stadium'],
@@ -141,13 +144,16 @@ exports.copyMongoDBToOracle = function (params, callback) {
         'League': row['League'],
         'Last World Series Win': row['Last World Series Win']
       });
+      cb(null);
     }, function (err, res) {
       handleError(err, callback, null);
+      console.log('copyMongoDBToOracle copying mongo documents oracleEntriesToAdd.length:', oracleEntriesToAdd.length);
       importOracle({
         list: oracleEntriesToAdd
       }, function (err, res2) {
         handleError(err, callback, null);
         console.log('copyMongoDBToOracle success res2:', res2);
+        callback(null, res2);
       });
     });
   });
