@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 node_modules
 .fhclocal
 fhc-debug.log
-=======
-lib-cov
 *.seed
 *.log
 *.csv
@@ -11,10 +8,6 @@ lib-cov
 *.out
 *.pid
 *.gz
-
 pids
 logs
 results
-
-npm-debug.log
->>>>>>> 767eb19286b65ba4fecee10b40d337f3b90d90ef
